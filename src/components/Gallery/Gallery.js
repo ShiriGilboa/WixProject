@@ -14,6 +14,7 @@ class Gallery extends React.Component {
     this.state = {
       images: [],
       galleryWidth: this.getGalleryWidth()
+
     };
   }
 
@@ -44,7 +45,14 @@ class Gallery extends React.Component {
         }
       });
   }
-
+    clone(img){
+      this.setState(
+           (prevState)=>{
+                  prevState.images.push(img);
+                  return {images:prevState.images}
+           }
+      );
+    }
   componentDidMount() {
     this.getImages(this.props.tag);
     this.setState({
@@ -59,8 +67,8 @@ class Gallery extends React.Component {
   render() {
     return (
       <div className="gallery-root">
-        {this.state.images.map(dto => {
-          return <Image key={'image-' + dto.id} dto={dto} galleryWidth={this.state.galleryWidth}/>;
+        {this.state.images.map((dto , i) => {
+          return <Image key={'image-' + dto.id+ i.toString()} dto={dto} callBack={this.clone.bind(this)} galleryWidth={this.state.galleryWidth}/>;
         })}
       </div>
     );
