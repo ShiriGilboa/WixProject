@@ -16,8 +16,9 @@ class Image extends React.Component {
       size: 200,
     changeFilter: false,
     currentFilter: 'none',
-    optionalFilters: ["saturate(20%)", "contrast(200%)", "grayscale(50%)","hue-rotate(90deg)", "sepia(100%)"]
-
+    optionalFilters: ['saturate(20%)', 'contrast(200%)', 'grayscale(50%)','hue-rotate(90deg)', 'sepia(100%)'],
+    img: props.dto,
+    isExpand: false
     };
 }
 
@@ -40,11 +41,23 @@ class Image extends React.Component {
     return `https://farm${dto.farm}.staticflickr.com/${dto.server}/${dto.id}_${dto.secret}.jpg`;
   }
 
+  onClone(){
+    this.props.callBack(this.props.dto);
+  }
 
    changeFilterOnclick() {
   const rand =Math.floor(Math.random() * 5) ;
-  console.log(this.state.filters[rand]);
-   this.setState({ currentFilter: String(this.state.filters[rand])})
+   this.setState({ currentFilter: String(this.state.optionalFilters[rand])})
+   }
+
+   expandImageSize(){
+   if (!this.state.isExpand){
+   this.setState({size: 400, isExpand: true})
+   }
+   else{
+   this.setState({size:200 , isExpand: false})
+   }
+
    }
 
   render() {
@@ -59,9 +72,9 @@ class Image extends React.Component {
                }}
         >
         <div>
-          <FontAwesome className="image-icon" name="clone" title="clone" onClick={this.function5}/>
+          <FontAwesome className="image-icon" name="clone" title="clone" onClick={this.onClone.bind(this)}/>
           <FontAwesome className="image-icon" name="filter" title="filter" onClick={() => {this.changeFilterOnclick()}} />
-          <FontAwesome className="image-icon" name="expand" title="expand"/>
+          <FontAwesome className="image-icon" name="expand" title="expand" onClick={ () => {this.expandImageSize()}} />
         </div>
       </div>
     );
@@ -69,4 +82,3 @@ class Image extends React.Component {
 }
 
 export default Image;
-
