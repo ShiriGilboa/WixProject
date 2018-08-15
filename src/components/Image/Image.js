@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import FontAwesome from 'react-fontawesome';
 import './Image.scss';
+import './modal.scss';
 
 class Image extends React.Component {
   static propTypes = {
@@ -18,7 +19,8 @@ class Image extends React.Component {
     currentFilter: 'none',
     optionalFilters: ['saturate(20%)', 'contrast(200%)', 'grayscale(50%)','hue-rotate(90deg)', 'sepia(100%)'],
     img: props.dto,
-    isExpand: false
+    isExpand: false,
+    urlImage: `url(${this.urlFromDto(this.props.dto)})`
     };
 }
 
@@ -50,19 +52,19 @@ class Image extends React.Component {
    this.setState({ currentFilter: String(this.state.optionalFilters[rand])})
    }
 
-   expandImageSize(){
-   if (!this.state.isExpand){
-   this.setState({size: 400, isExpand: true})
-   }
-   else{
-   this.setState({size:200 , isExpand: false})
-   }
+   showModal = () => {
+    this.setState({ isExpand: !this.state.isExpand });
+  };
 
-   }
+  hideModal = () => {
+    this.setState({ isExpand: false });
+  };
+
 
   render() {
     return (
       <div
+      
         className="image-root"
                   style={{
                  backgroundImage: `url(${this.urlFromDto(this.props.dto)})`,
@@ -70,15 +72,32 @@ class Image extends React.Component {
                  height: this.state.size + 'px',
                  WebkitFilter:   this.state.currentFilter
                }}
+
         >
         <div>
           <FontAwesome className="image-icon" name="clone" title="clone" onClick={this.onClone.bind(this)}/>
           <FontAwesome className="image-icon" name="filter" title="filter" onClick={() => {this.changeFilterOnclick()}} />
-          <FontAwesome className="image-icon" name="expand" title="expand" onClick={ () => {this.expandImageSize()}} />
+          <FontAwesome className="image-icon" name="expand" title="expand" onClick={this.showModal} />
+          <Modal show={this.state.isExpand} handleClose={this.hideModal} children= {this.state.urlImage}>
+          </Modal>
         </div>
       </div>
     );
   }
 }
 
+
+
+const Modal = ({ handleClose, show ,children }) => {
+  const showHideClassName = show ? 'modal display-block' : 'modal display-none';
+  const img = children;
+  return (
+    <div className={showHideClassName}>
+    <section className="modal-main" style={{backgroundImage: img }}>
+      <button onClick={handleClose}>close</button>
+    </section>
+    
+  </div>
+  );
+};
 export default Image;
