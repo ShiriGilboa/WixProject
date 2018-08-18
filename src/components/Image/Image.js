@@ -28,7 +28,7 @@ class Image extends React.Component {
   calcImageSize() {
     const {galleryWidth} = this.props;
     const targetSize = 200;
-    const imagesPerRow = Math.round(galleryWidth / targetSize);
+    const imagesPerRow = Math.floor(galleryWidth / targetSize);
     const size = (galleryWidth / imagesPerRow);
     this.setState({
       size: size
@@ -68,8 +68,6 @@ class Image extends React.Component {
         className="image-root"
                   style={{
                  backgroundImage: `url(${this.urlFromDto(this.props.dto)})`,
-                 width: this.state.size + 'px',
-                 height: this.state.size + 'px',
                  WebkitFilter:   this.state.currentFilter
                }}
 
@@ -94,9 +92,8 @@ const Modal = ({ handleClose, show ,children }) => {
   return (
     <div className={showHideClassName}>
     <section className="modal-main" style={{backgroundImage: img }}>
-      <button onClick={handleClose}>close</button>
+      <FontAwesome className="fa fa-window-close" name= "close" title = "close" onClick={handleClose}/>
     </section>
-    
   </div>
   );
 };
