@@ -1,5 +1,7 @@
 .gallery-root {
   text-align: center;
+  display: flex;
+  flex-wrap:   wrap
 }
 
 .gallery-header {
@@ -7,6 +9,9 @@
   padding: 10px;
   color: white;
   font-size: 20pt;
+
+  // display: inline-block;
+  // width: calc(100% - 10em);
 }
 
 .gallery-intro {
