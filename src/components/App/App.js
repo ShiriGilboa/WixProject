@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.scss';
 import Gallery from '../Gallery';
+import {DebounceInput} from 'react-debounce-input';
 
 class App extends React.Component {
   static propTypes = {
@@ -18,7 +19,7 @@ class App extends React.Component {
       <div className="app-root">
         <div className="app-header">
           <h2>Flickr Gallery</h2>
-          <input className="app-input" onChange={event => this.setState({tag: event.target.value})} value={this.state.tag}/>
+          <DebounceInput className="app-input"  debounceTimeout={500} onChange={event => this.setState({tag: event.target.value})} value={this.state.tag}/>
         </div>
         <Gallery tag={this.state.tag}/>
       </div>
