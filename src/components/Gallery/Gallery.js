@@ -11,10 +11,11 @@ class Gallery extends React.Component {
 
   constructor(props) {
     super(props);
+    this.handleScroll=this.handleScroll.bind(this);
     this.state = {
       images: [],
-      galleryWidth: this.getGalleryWidth()
-
+      galleryWidth: this.getGalleryWidth(),
+      isLoading: false
     };
   }
 
@@ -26,6 +27,11 @@ class Gallery extends React.Component {
     }
   }
   getImages(tag) {
+    if(this.state.isLoading)
+    {
+      return;
+    }
+    this.setState({isLoading: true});
     const getImagesUrl = `services/rest/?method=flickr.photos.search&api_key=522c1f9009ca3609bcbaf08545f067ad&tags=${tag}&tag_mode=any&per_page=100&format=json&safe_search=1&nojsoncallback=1`;
     const baseUrl = 'https://api.flickr.com/';
     axios({
@@ -45,6 +51,16 @@ class Gallery extends React.Component {
         }
       });
   }
+
+  handleScroll = (e) => {
+    const el = e.target.documentElement;
+    const bottom = el.scrollHeight - el.scrollTop === el.clientHeight;
+    if (bottom) {
+      this.getImages(this.props.tag);
+     this.setState({isLoading: false})
+     }
+  }
+
     clone(img){
       this.setState(
            (prevState)=>{
@@ -53,12 +69,18 @@ class Gallery extends React.Component {
            }
       );
     }
+
   componentDidMount() {
+    window.addEventListener('scroll',this.handleScroll);
     this.getImages(this.props.tag);
     this.setState({
       galleryWidth: document.body.clientWidth
     });
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleOnScroll);
+}
 
   componentWillReceiveProps(props) {
     this.getImages(props.tag);
@@ -66,7 +88,7 @@ class Gallery extends React.Component {
 
   render() {
     return (
-      <div className="gallery-root">
+      <div  className="gallery-root">
         {this.state.images.map((dto , i) => {
           return <Image key={'image-' + dto.id+ i.toString()} dto={dto} callBack={this.clone.bind(this)} galleryWidth={this.state.galleryWidth}/>;
         })}
