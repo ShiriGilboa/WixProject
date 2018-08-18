@@ -6,6 +6,10 @@
   box-sizing: border-box;
   position: relative;
   border: 1px solid white;
+  min-width: 200px;
+  min-height: 200px;
+  flex: 1;
+
 
   > div {
     visibility: hidden;
